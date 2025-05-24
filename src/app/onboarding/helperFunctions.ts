@@ -1,4 +1,5 @@
 import { GoogleGenAI, Type } from "@google/genai";
+import { title } from "process";
 const ai = new GoogleGenAI({ apiKey: process.env.NEXT_PUBLIC_GEMINI_API_KEY });
 
 const githubTemp = `[
@@ -414,4 +415,38 @@ export async function relevantReposParser(repos: ReturnType<typeof githubRepoPar
     return sampleRes;
 }
 
-
+export function rawToExperience(rawJson: string) {
+    const rawExperience = JSON.parse(rawJson);
+    const parsedExperience = rawExperience[0].experience.map((exp: any) => ({
+        title: exp.title,
+        company: exp.company,
+        location: exp.location,
+        duration: exp.duration,
+        company2: exp.employment_type,
+        description: exp.description,
+    }));
+    return parsedExperience;
+}
+export function extractProfileInfo(rawJson: string) {
+    const profileData = JSON.parse(rawJson);
+    const profile = profileData[0];
+    
+    return {
+        fullName: profile.basic_info.fullname,
+        headline: profile.basic_info.headline,
+        location: profile.basic_info.location.full,
+        latestEducation: profile.education[0] ? {
+            school: profile.education[0].school,
+            degree: profile.education[0].degree,
+            duration: profile.education[0].duration
+        } : null,
+        skills: profile.experience
+            .filter((exp: any) => exp.skills && exp.skills.length > 0)
+            .flatMap((exp: any) => exp.skills),
+        certifications: profile.certifications.map((cert: any) => ({
+            name: cert.name,
+            issuer: cert.issuer,
+            issuedDate: cert.issued_date
+        }))
+    };
+}
