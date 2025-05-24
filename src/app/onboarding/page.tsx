@@ -83,6 +83,7 @@ export default function OnboardingPage() {
         nextStep();
       } else {
         console.error("No GitHub data found in sessionStorage.");
+        // sessionStorage.clear();
       }
 
     }
