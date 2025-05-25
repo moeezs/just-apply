@@ -218,7 +218,7 @@ export async function GET(request: Request) {
   }
   // return NextResponse.json(tempData);
 
-  return new Promise((resolve) => {
+  return new Promise<NextResponse>((resolve) => {
     gs(urlReq, (err: Error, data: GitHubRepoData) => {
       if (err) {
         resolve(
