@@ -49,6 +49,12 @@ export default function OnboardingPage() {
         linkedinInput?.focus();
         setIsLoading(false);
         return;
+      } else if (!linkedin.includes('linkedin.com/in/')) {
+        linkedinInput?.style.setProperty("border", "1px solid red");
+        alert("Please enter a valid LinkedIn profile URL (e.g., https://www.linkedin.com/in/username)");
+        linkedinInput?.focus();
+        setIsLoading(false);
+        return;
       } else {
         linkedinInput?.style.removeProperty("border");
       }
@@ -196,7 +202,7 @@ export default function OnboardingPage() {
               id="linkedin"
               value={linkedin}
               onChange={(e) => setLinkedin(e.target.value)}
-              placeholder="Enter your LinkedIn URL"
+              placeholder="https://www.linkedin.com/in/yourusername"
             />
           </div>
         </div>

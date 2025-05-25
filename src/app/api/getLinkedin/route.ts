@@ -1,7 +1,10 @@
 import { ApifyClient } from 'apify-client';
 
 export async function POST(request: Request) {
-    const { linkedinUrl } = await request.json();
+    const { url } = await request.json();
+    
+    // Extract username from LinkedIn URL
+    let username = url;
 
     // Initialize the ApifyClient with API token
     const client = new ApifyClient({
@@ -10,7 +13,7 @@ export async function POST(request: Request) {
 
     // Prepare Actor input
     const input = {
-        "username": linkedinUrl
+        "username": username
     };
 
     const run = await client.actor("VhxlqQXRwhW8H5hNV").call(input);
