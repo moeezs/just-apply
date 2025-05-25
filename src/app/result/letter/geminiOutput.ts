@@ -42,6 +42,8 @@ export async function coverLetterOutput(jobDesc: string, relevantExperiencesIn: 
                                 - Body paragraphs (3-4): Strategically showcase relevant experience, projects, and skills with specific examples
                                 - Closing paragraph: Reinforce value proposition and include strong call to action
                                 - Each paragraph must be a separate element in an array
+                                - You ARE NOT TO implement ANY placeholders at all. The output must be a complete cover letter with no placeholders.
+                                - Use a professional and clean format, ensuring readability and clarity
 
                                 **4. TONE AND STYLE:**
                                 - Professional yet personable

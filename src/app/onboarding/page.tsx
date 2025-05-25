@@ -297,7 +297,7 @@ export default function OnboardingPage() {
 }
 function redirectToResume() {
   
-  window.location.href = "/result/resume";
+  window.location.href = "/result";
   return;
 }
 
