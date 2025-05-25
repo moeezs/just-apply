@@ -16,12 +16,40 @@ export default function CoverLetterPage() {
             try {
                 setIsLoading(true);
                 
-                const jobDesc = sessionStorage.getItem("jobDesc") || "";
-                const relevantExperiences = sessionStorage.getItem("selectedExperience") || "[]";
-                const relevantProjects = sessionStorage.getItem("selectedRepos") || "[]";
-                const profileData = sessionStorage.getItem("profileData") || "{}";
-                const basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}");
-
+                let jobDesc = "";
+                let relevantExperiences = "[]";
+                let relevantProjects = "[]";
+                let profileData = "{}";
+                let basicInfoData = {};
+                
+                if (typeof window !== 'undefined') {
+                    const urlParams = new URLSearchParams(window.location.search);
+                    const sessionDataParam = urlParams.get('session-data');
+                    
+                    if (sessionDataParam) {
+                        try {
+                            const decodedData = JSON.parse(atob(sessionDataParam));
+                            
+                            jobDesc = decodedData.jobDesc || "";
+                            relevantExperiences = decodedData.selectedExperience || "[]";
+                            relevantProjects = decodedData.selectedRepos || "[]";
+                            profileData = decodedData.profileData || "{}";
+                            basicInfoData = JSON.parse(decodedData.basicInfo || "{}");
+                            
+                            console.log("Using data from URL parameters");
+                        } catch (e) {
+                            console.error("Error parsing session data from URL:", e);
+                        }
+                    } else {
+                        jobDesc = sessionStorage.getItem("jobDesc") || "";
+                        relevantExperiences = sessionStorage.getItem("selectedExperience") || "[]";
+                        relevantProjects = sessionStorage.getItem("selectedRepos") || "[]";
+                        profileData = sessionStorage.getItem("profileData") || "{}";
+                        basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}");
+                        
+                        console.log("Using data from sessionStorage");
+                    }
+                }
                 
                 setBasicInfo(basicInfoData);
                 
@@ -35,6 +63,7 @@ export default function CoverLetterPage() {
                 console.error('Error generating cover letter:', err);
             } finally {
                 setIsLoading(false);
+                document.body.classList.add('content-loaded');
             }
         };
 
@@ -128,7 +157,7 @@ export default function CoverLetterPage() {
                 {/* Closing */}
                 <div className="space-y-4">
                     <p className="text-gray-900">Sincerely,</p>
-                    <div className="pt-8">
+                    <div className="pt-2">
                         <p className="text-gray-900 font-semibold">{profileDataParsed?.fullName || "[Your Full Name]"}</p>
                     </div>
                 </div>

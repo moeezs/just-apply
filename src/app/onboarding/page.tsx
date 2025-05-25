@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import * as helperFunctions from "@/app/onboarding/helperFunctions";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { LoaderButton } from "@/components/ui/loader-button";
 
 const steps = [
   { label: "Input", content: "github" },
@@ -19,6 +20,7 @@ export default function OnboardingPage() {
   const [step, setStep] = useState(0);
   const [github, setGithub] = useState("");
   const [linkedin, setLinkedin] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const [selectedExperience, setSelectedExperience] = useState<number[]>([]);
   const [selectedRepos, setSelectedRepos] = useState<number[]>([]);
@@ -27,6 +29,8 @@ export default function OnboardingPage() {
   const prevStep = () => setStep((s) => Math.max(s - 1, 0));
 
   async function nextStepCheck() {
+    setIsLoading(true);
+    
     if (step === 0) {
       const githubInput = document.getElementById("github");
       const linkedinInput = document.getElementById("linkedin");
@@ -34,6 +38,7 @@ export default function OnboardingPage() {
       if (github.trim() === "") {
         githubInput?.style.setProperty("border", "1px solid red");
         githubInput?.focus();
+        setIsLoading(false);
         return;
       } else {
         githubInput?.style.removeProperty("border");
@@ -42,21 +47,22 @@ export default function OnboardingPage() {
       if (linkedin.trim() === "") {
         linkedinInput?.style.setProperty("border", "1px solid red");
         linkedinInput?.focus();
+        setIsLoading(false);
         return;
       } else {
         linkedinInput?.style.removeProperty("border");
       }
       
-      const githubRes = await fetch(`/api/getRepos?username=${github}`);
-      const linkedinRes = await fetch(`/api/getLinkedin`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: linkedin }),
-      });
-
       try {
+        const githubRes = await fetch(`/api/getRepos?username=${github}`);
+        const linkedinRes = await fetch(`/api/getLinkedin`, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ url: linkedin }),
+        });
+
         const githubData = await githubRes.json();
         const linkedinData = await linkedinRes.json();
         const profileData = helperFunctions.extractProfileInfo(JSON.stringify(linkedinData));
@@ -66,6 +72,8 @@ export default function OnboardingPage() {
         nextStep();
       } catch (error) {
         console.error("Error fetching data:", error);
+      } finally {
+        setIsLoading(false);
       }
 
     }
@@ -74,25 +82,33 @@ export default function OnboardingPage() {
       if (jobDesc?.value.trim() === "") {
         jobDesc?.style.setProperty("border", "1px solid red");
         jobDesc?.focus();
+        setIsLoading(false);
         return;
       } else {
         jobDesc?.style.removeProperty("border");
       }
-      const githubRawJson = sessionStorage.getItem("githubRawJson");
-      const linkedinRawJson = sessionStorage.getItem("linkedinRawJson");
-      if (githubRawJson && linkedinRawJson) {
-        const parsedRepos = helperFunctions.githubRepoParser(githubRawJson);
-        const jobDescValue = jobDesc?.value ?? "";
-        const relevantReposString = await helperFunctions.relevantReposParser(parsedRepos, jobDescValue);
-        const relevantRepos = relevantReposString ? JSON.parse(relevantReposString) : [];
-        sessionStorage.setItem("relevantRepos", JSON.stringify(relevantRepos));
-        sessionStorage.setItem("jobDesc", jobDescValue);
-        const parsedExperience = helperFunctions.rawToExperience(linkedinRawJson);
-        sessionStorage.setItem("linkedinExperience", JSON.stringify(parsedExperience));
-        nextStep();
-      } else {
-        console.error("No GitHub or LinkedIn data found in sessionStorage.");
-        // sessionStorage.clear();
+      
+      try {
+        const githubRawJson = sessionStorage.getItem("githubRawJson");
+        const linkedinRawJson = sessionStorage.getItem("linkedinRawJson");
+        if (githubRawJson && linkedinRawJson) {
+          const parsedRepos = helperFunctions.githubRepoParser(githubRawJson);
+          const jobDescValue = jobDesc?.value ?? "";
+          const relevantReposString = await helperFunctions.relevantReposParser(parsedRepos, jobDescValue);
+          const relevantRepos = relevantReposString ? JSON.parse(relevantReposString) : [];
+          sessionStorage.setItem("relevantRepos", JSON.stringify(relevantRepos));
+          sessionStorage.setItem("jobDesc", jobDescValue);
+          const parsedExperience = helperFunctions.rawToExperience(linkedinRawJson);
+          sessionStorage.setItem("linkedinExperience", JSON.stringify(parsedExperience));
+          nextStep();
+        } else {
+          console.error("No GitHub or LinkedIn data found in sessionStorage.");
+          // sessionStorage.clear();
+        }
+      } catch (error) {
+        console.error("Error processing data:", error);
+      } finally {
+        setIsLoading(false);
       }
 
     }
@@ -114,6 +130,7 @@ export default function OnboardingPage() {
       
       sessionStorage.setItem("selectedRepos", JSON.stringify(filteredRepos));
       sessionStorage.setItem("selectedExperience", JSON.stringify(filteredExperience));
+      setIsLoading(false);
       nextStep();
     }
     if (step === 3) {
@@ -124,6 +141,7 @@ export default function OnboardingPage() {
       if (phoneInput?.value.trim() === "") {
         phoneInput?.style.setProperty("border", "1px solid red");
         phoneInput?.focus();
+        setIsLoading(false);
         return;
       } else {
         phoneInput?.style.removeProperty("border");
@@ -132,6 +150,7 @@ export default function OnboardingPage() {
       if (emailInput?.value.trim() === "") {
         emailInput?.style.setProperty("border", "1px solid red");
         emailInput?.focus();
+        setIsLoading(false);
         return;
       } else {
         emailInput?.style.removeProperty("border");
@@ -145,7 +164,7 @@ export default function OnboardingPage() {
         portfolio: portfolioInput?.value ?? "",
       }
       sessionStorage.setItem("basicInfo", JSON.stringify(basicInfo));
-      redirectToResume();
+      redirectToResume(setIsLoading);
     }
       
   }
@@ -283,20 +302,24 @@ export default function OnboardingPage() {
       )}
 
       <div className="flex justify-between mt-8">
-        <Button variant="outline" onClick={prevStep} disabled={step === 0}>
+        <Button variant="outline" onClick={prevStep} disabled={step === 0 || isLoading}>
           Previous
         </Button>
         {step < steps.length - 1 ? (
-          <Button onClick={nextStepCheck}>Next</Button>
+          <LoaderButton onClick={nextStepCheck} isLoading={isLoading}>
+            Next
+          </LoaderButton>
         ) : (
-          <Button onClick={nextStepCheck}>Submit</Button>
+          <LoaderButton onClick={nextStepCheck} isLoading={isLoading}>
+            Submit
+          </LoaderButton>
         )}
       </div>
     </div>
   );
 }
-function redirectToResume() {
-  
+function redirectToResume(setLoading: React.Dispatch<React.SetStateAction<boolean>>) {
+  setLoading(false);
   window.location.href = "/result";
   return;
 }

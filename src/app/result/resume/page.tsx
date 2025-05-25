@@ -12,22 +12,45 @@ export default function Resume() {
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
-        // Only access sessionStorage on the client side
         if (typeof window !== 'undefined') {
-            setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}'));
-            setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}'));
-            setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]'));
-            setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]'));
+            const urlParams = new URLSearchParams(window.location.search);
+            const sessionDataParam = urlParams.get('session-data');
+            
+            if (sessionDataParam) {
+                try {
+                    const decodedData = JSON.parse(atob(sessionDataParam));
+                    
+                    setProfileData(JSON.parse(decodedData.profileData || '{}'));
+                    setBasicInfo(JSON.parse(decodedData.basicInfo || '{}'));
+                    setSelectedRepos(JSON.parse(decodedData.selectedRepos || '[]'));
+                    setSelectedExperiences(JSON.parse(decodedData.selectedExperience || '[]'));
+                    
+                    // console.log("Resume: Using data from URL parameters");
+                } catch (e) {
+                    console.error("Error parsing session data from URL:", e);
+                    setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}'));
+                    setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}'));
+                    setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]'));
+                    setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]'));
+                }
+            } else {
+                setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}'));
+                setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}'));
+                setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]'));
+                setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]'));
+                
+                console.log("Resume: Using data from sessionStorage");
+            }
+            
             setIsLoaded(true);
+            document.body.classList.add('content-loaded');
         }
     }, []);
 
-    // Helper function to format URLs
     const formatUrl = (url: string, type?: string) => {
         if (!url) return '';
         
         if (type === 'github') {
-            // For GitHub, assume it's just a username and create the full URL
             return `https://github.com/${url}`;
         }
         
@@ -38,12 +61,16 @@ export default function Resume() {
     };
 
     if (!isLoaded) {
-        return <div className="max-w-4xl mx-auto p-8 mt-10">Loading...</div>;
+        return (
+            <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen flex items-center justify-center">
+                <p>Generating resume...</p>
+            </div>
+        );
     }
 
     return (
 
-    <div className="max-w-4xl mx-auto p-8 bg-white shadow-lg mt-10">
+    <div className="max-w-4xl mx-auto p-8 bg-white mt-5">
         {/* <!-- Header --> */}
         <div>
             <div className="flex justify-between items-center border-b pb-4 mb-3">
