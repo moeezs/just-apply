@@ -121,18 +121,18 @@ export async function coverLetterOutput(jobDesc: string, relevantExperiencesIn: 
 }
 
 
-const sample = {
-    "header": {
-        "companyAddress": "845 Mission Street, Suite 1200, San Francisco, CA 94103",
-        "companyName": "Lunaris Digital Inc.",
-        "hiringManagerName": "Avery Kim, Director of Engineering",
-        "location": "San Francisco, CA 94103",
-        "title": "Senior TypeScript Web Developer"
-    },
-    "paragraphs": [
-        "While my academic journey at McMaster University, pursuing a BASc in Computer Science, is still ongoing (anticipated graduation: April 2029), my experience leading software development within student organizations like McMaster Robo Sub and McMaster Aerial Robotics & Drones Club has prepared me to excel as your Senior TypeScript Web Developer. Lunaris Digital's commitment to building scalable and visually stunning web applications deeply resonates with my passion for crafting high-quality, performant software.",
-        "My contributions to McMaster Robo Sub, where I served as a Software Team Member for five months, involved designing and implementing key algorithms critical to the autonomous navigation system of our underwater robot. This project sharpened my skills in problem-solving, collaborative development and directly contributed to improving our robot's maneuverability and efficiency by 15%. Similarly, my role at McMaster Aerial Robotics & Drones Club further solidified my proficiency in collaborative software development within a fast-paced team environment. While details of specific projects like 'just-apply' and 'studysaver' cannot be openly shared at this moment, I am able to showcase additional examples within my portfolio.",
-        "My experience extends beyond academic projects. I'm proficient in Xcode and iPhone Application Development, demonstrating a versatile skill set and capacity to adapt to diverse technological environments. I possess a strong understanding of Git & Github and adhere to robust code review practices, essential for maintaining a high standard of code quality. My experience with collaborative software development, including agile methodologies, makes me confident in my ability to seamlessly integrate into your team and contribute from day one.",
-        "I am eager to leverage my skills and passion for web development to contribute to Lunaris Digital's success. The opportunity to work on challenging projects alongside a team of talented engineers excites me. My portfolio ( [insert portfolio link here] ) provides further details on my projects. Thank you for your time and consideration. I am available for an interview at your earliest convenience."
-    ]
-};
+// const sample = {
+//     "header": {
+//         "companyAddress": "845 Mission Street, Suite 1200, San Francisco, CA 94103",
+//         "companyName": "Lunaris Digital Inc.",
+//         "hiringManagerName": "Avery Kim, Director of Engineering",
+//         "location": "San Francisco, CA 94103",
+//         "title": "Senior TypeScript Web Developer"
+//     },
+//     "paragraphs": [
+//         "While my academic journey at McMaster University, pursuing a BASc in Computer Science, is still ongoing (anticipated graduation: April 2029), my experience leading software development within student organizations like McMaster Robo Sub and McMaster Aerial Robotics & Drones Club has prepared me to excel as your Senior TypeScript Web Developer. Lunaris Digital's commitment to building scalable and visually stunning web applications deeply resonates with my passion for crafting high-quality, performant software.",
+//         "My contributions to McMaster Robo Sub, where I served as a Software Team Member for five months, involved designing and implementing key algorithms critical to the autonomous navigation system of our underwater robot. This project sharpened my skills in problem-solving, collaborative development and directly contributed to improving our robot's maneuverability and efficiency by 15%. Similarly, my role at McMaster Aerial Robotics & Drones Club further solidified my proficiency in collaborative software development within a fast-paced team environment. While details of specific projects like 'just-apply' and 'studysaver' cannot be openly shared at this moment, I am able to showcase additional examples within my portfolio.",
+//         "My experience extends beyond academic projects. I'm proficient in Xcode and iPhone Application Development, demonstrating a versatile skill set and capacity to adapt to diverse technological environments. I possess a strong understanding of Git & Github and adhere to robust code review practices, essential for maintaining a high standard of code quality. My experience with collaborative software development, including agile methodologies, makes me confident in my ability to seamlessly integrate into your team and contribute from day one.",
+//         "I am eager to leverage my skills and passion for web development to contribute to Lunaris Digital's success. The opportunity to work on challenging projects alongside a team of talented engineers excites me. My portfolio ( [insert portfolio link here] ) provides further details on my projects. Thank you for your time and consideration. I am available for an interview at your earliest convenience."
+//     ]
+// };

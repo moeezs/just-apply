@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { coverLetterOutput } from "./geminiOutput";
-import { League_Gothic } from "next/font/google";
 
 export default function CoverLetterPage() {
     const [coverLetterData, setCoverLetterData] = useState<any>(null);

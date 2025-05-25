@@ -13,7 +13,7 @@ interface GitHubRepoData {
     updated: string;
   }>;
 }
-
+/*
 const tempData = {entries: [
     {
         "url": "/moeezs/just-apply",
@@ -206,6 +206,7 @@ const tempData = {entries: [
         "updated": "2023-08-17T03:31:50Z"
     }
 ]};
+*/
 
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
