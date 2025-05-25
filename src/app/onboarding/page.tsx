@@ -100,7 +100,7 @@ export default function OnboardingPage() {
         if (githubRawJson && linkedinRawJson) {
           const parsedRepos = helperFunctions.githubRepoParser(githubRawJson);
           const jobDescValue = jobDesc?.value ?? "";
-          const relevantReposString = await helperFunctions.relevantReposParser(parsedRepos, jobDescValue);
+          const relevantReposString = await helperFunctions.relevantReposParser(parsedRepos);//, jobDescValue);
           const relevantRepos = relevantReposString ? JSON.parse(relevantReposString) : [];
           sessionStorage.setItem("relevantRepos", JSON.stringify(relevantRepos));
           sessionStorage.setItem("jobDesc", jobDescValue);
