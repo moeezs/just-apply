@@ -2,14 +2,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
 export function middleware(request: NextRequest) {
-    // Check if user has session data
-    const sessionToken = request.cookies.get('session')?.value
-    
-    // If no session token and not already on home page, redirect to home
-    if (!sessionToken && request.nextUrl.pathname !== '/') {
-        return NextResponse.redirect(new URL('/', request.url))
-    }
-    
+
     return NextResponse.next()
 }
 

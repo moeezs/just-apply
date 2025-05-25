@@ -145,7 +145,7 @@ export default function OnboardingPage() {
         portfolio: portfolioInput?.value ?? "",
       }
       sessionStorage.setItem("basicInfo", JSON.stringify(basicInfo));
-      nextStep();
+      redirectToResume();
     }
       
   }
@@ -248,19 +248,6 @@ export default function OnboardingPage() {
       )}
 
       {step === 3 && (
-        <div className="space-y-2">
-          <label htmlFor="linkedin" className="block text-sm font-medium">
-            LinkedIn URL
-          </label>
-          <Input
-            id="linkedin"
-            value={linkedin}
-            onChange={(e) => setLinkedin(e.target.value)}
-            placeholder="Enter your LinkedIn URL"
-          />
-        </div>
-      )}
-      {step === 3 && (
         <div className="space-y-4">
           <div className="space-y-2">
             <label htmlFor="phone" className="block text-sm font-medium">
@@ -302,9 +289,15 @@ export default function OnboardingPage() {
         {step < steps.length - 1 ? (
           <Button onClick={nextStepCheck}>Next</Button>
         ) : (
-          <Button type="submit">Submit</Button>
+          <Button onClick={nextStepCheck}>Submit</Button>
         )}
       </div>
     </div>
   );
 }
+function redirectToResume() {
+  
+  window.location.href = "/result/resume";
+  return;
+}
+

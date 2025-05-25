@@ -1,0 +1,138 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { coverLetterOutput } from "./geminiOutput";
+import { League_Gothic } from "next/font/google";
+
+export default function CoverLetterPage() {
+    const [coverLetterData, setCoverLetterData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(true);
+    const [error, setError] = useState<string | null>(null);
+    const [basicInfo, setBasicInfo] = useState<any>({});
+    const [profileDataParsed, setProfileDataParsed] = useState<any>({});
+
+    useEffect(() => {
+        const generateCoverLetter = async () => {
+            try {
+                setIsLoading(true);
+                
+                const jobDesc = sessionStorage.getItem("jobDesc") || "";
+                const relevantExperiences = sessionStorage.getItem("selectedExperience") || "[]";
+                const relevantProjects = sessionStorage.getItem("selectedRepos") || "[]";
+                const profileData = sessionStorage.getItem("profileData") || "{}";
+                const basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}");
+
+                
+                setBasicInfo(basicInfoData);
+                
+                const data = await coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData);
+                const parsedData = JSON.parse(data || "{}");
+                setProfileDataParsed(JSON.parse(profileData || "{}"));
+
+                setCoverLetterData(parsedData);
+            } catch (err) {
+                setError(err instanceof Error ? err.message : 'An error occurred');
+                console.error('Error generating cover letter:', err);
+            } finally {
+                setIsLoading(false);
+            }
+        };
+
+        generateCoverLetter();
+    }, []);
+
+    if (isLoading) {
+        return (
+            <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen flex items-center justify-center">
+                <p>Generating cover letter...</p>
+            </div>
+        );
+    }
+
+    if (error) {
+        return (
+            <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen flex items-center justify-center">
+                <p className="text-red-600">Error: {error}</p>
+            </div>
+        );
+    }
+
+    if (!coverLetterData) {
+        return (
+            <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen flex items-center justify-center">
+                <p>No cover letter data available</p>
+            </div>
+        );
+    }
+
+    return (
+        <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen">
+            <div className="space-y-6">
+                <div className="text-right space-y-1">
+                    <h1 className="text-2xl font-bold text-gray-900">{profileDataParsed?.fullName || "[Your Full Name]"}</h1>
+                    <p className="text-gray-700">{basicInfo?.phone || "[Your Phone Number]"}</p>
+                    <p className="text-gray-700">{basicInfo?.email || "[Your Email Address]"}</p>
+                    <p className="text-gray-700">{profileDataParsed?.location || "[Your Location]"}</p>
+                </div>
+
+                {/* Date */}
+                <div className="text-right">
+                    {new Date().toLocaleDateString('en-GB', { 
+                        day: 'numeric', 
+                        month: 'long', 
+                        year: 'numeric' 
+                    }).replace(/ ([0-9]{4})$/, ', $1')}
+                </div>
+
+                {/* Hiring manager info */}
+                <div className="space-y-1">
+                    <p className="text-gray-900 font-semibold">{coverLetterData.header.hiringManagerName}</p>
+                    {coverLetterData.header.hiringManagerTitle !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerTitle}</p>
+                    )}
+                    {coverLetterData.header.hiringManagerCompany !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerCompany}</p>
+                    )}
+                    {coverLetterData.header.hiringManagerAddress !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerAddress}</p>
+                    )}
+                    {coverLetterData.header.hiringManagerLocation !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerLocation}</p>
+                    )}
+                    {coverLetterData.header.hiringManagerEmail !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerEmail}</p>
+                    )}
+                    {coverLetterData.header.hiringManagerPhone !== "N/A" && (
+                        <p className="text-gray-700">{coverLetterData.header.hiringManagerPhone}</p>
+                    )}
+                </div>
+                {/* <div className="space-y-1">
+                    <p className="text-gray-700">{coverLetterData.header.title}</p>
+                    <p className="text-gray-700">{coverLetterData.header.companyName}</p>
+                    <p className="text-gray-700">{coverLetterData.header.companyAddress}</p>
+                    <p className="text-gray-700">{coverLetterData.header.location}</p>
+                </div> */}
+
+                {/* Salutation */}
+                <div>
+                    <p className="text-gray-900">Dear {coverLetterData.header.hiringManagerName},</p>
+                </div>
+
+                {/* Body paragraphs */}
+                <div className="space-y-4 text-gray-800 leading-relaxed">
+                    {coverLetterData.paragraphs.map((paragraph: string, index: number) => (
+                        <p key={index}>{paragraph}</p>
+                    ))}
+                </div>
+
+                {/* Closing */}
+                <div className="space-y-4">
+                    <p className="text-gray-900">Sincerely,</p>
+                    <div className="pt-8">
+                        <p className="text-gray-900 font-semibold">{profileDataParsed?.fullName || "[Your Full Name]"}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    );
+}
