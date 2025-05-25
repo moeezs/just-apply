@@ -60,10 +60,12 @@ export async function relevantReposParser(repos: ReturnType<typeof githubRepoPar
 
     // console.log(response.text);
 
+    void jobDesc;
+
 
     const sampleRes = repos.map((repo: any) => ({
         ...repo,
-        relevant: "false"
+        relevant: "false" // for now
     }));
     return sampleRes;
 }
