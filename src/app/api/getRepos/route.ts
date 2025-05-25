@@ -13,18 +13,7 @@ interface GitHubRepoData {
     updated: string;
   }>;
 }
-const mockData: GitHubRepoData = {
-  entries: [{
-    url: 'https://github.com/iteles/learn-ab-and-multivariate-testing',
-    name: 'learn-ab-and-multivariate-testing',
-    lang: '',
-    desc: 'Tutorial on A/B and multivariate testing',
-    info: '',
-    stars: '4',
-    forks: '0',
-    updated: '2015-07-08T08:36:37Z'
-  }]
-}
+
 const tempData = {entries: [
     {
         "url": "/moeezs/just-apply",
@@ -226,7 +215,7 @@ export async function GET(request: Request) {
   if (!username) {
     return NextResponse.json({ error: 'Username is required' }, { status: 400 });
   }
-  return NextResponse.json(tempData);
+  // return NextResponse.json(tempData);
 
   return new Promise((resolve) => {
     gs(urlReq, (err: Error, data: GitHubRepoData) => {

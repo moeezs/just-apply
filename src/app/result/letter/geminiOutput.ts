@@ -5,7 +5,7 @@ export async function coverLetterOutput(jobDesc: string, relevantExperiencesIn: 
     const relevantExperiences = JSON.parse(relevantExperiencesIn);
     const relevantProjects = JSON.parse(relevantProjectsIn);
     const profileData = JSON.parse(profileDataIn);
-    /*
+    
     const response = await ai.models.generateContent({
         model: "gemini-1.5-flash",
         contents: [
@@ -113,11 +113,11 @@ export async function coverLetterOutput(jobDesc: string, relevantExperiencesIn: 
             }
         }
     });
-    */
+    
 
     // console.log(response.text);
-    // return response.text;
-    return JSON.stringify(sample)
+    return response.text;
+    //return JSON.stringify(sample)
 }
 
 

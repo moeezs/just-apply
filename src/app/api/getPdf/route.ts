@@ -11,7 +11,6 @@ export async function POST(req: NextRequest) {
       });
     }
 
-    // Get the full URL by combining with the request origin
     const fullUrl = new URL(url, req.url).toString();
 
     const browser = await puppeteer.launch({
