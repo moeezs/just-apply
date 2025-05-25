@@ -2,14 +2,75 @@
 
 import { useState, useEffect } from "react";
 import { coverLetterOutput } from "./geminiOutput";
-import { League_Gothic } from "next/font/google";
+
+// Type definitions
+interface CoverLetterHeader {
+    hiringManagerName: string;
+    title: string;
+    companyName: string;
+    companyAddress: string;
+    location: string;
+    hiringManagerTitle?: string;
+    hiringManagerCompany?: string;
+    hiringManagerAddress?: string;
+    hiringManagerLocation?: string;
+    hiringManagerEmail?: string;
+    hiringManagerPhone?: string;
+}
+
+interface CoverLetterData {
+    header: CoverLetterHeader;
+    paragraphs: string[];
+}
+
+interface BasicInfo {
+    github: string;
+    linkedin: string;
+    phone: string;
+    email: string;
+    portfolio: string;
+}
+
+interface ProfileData {
+    fullName: string;
+    location: string;
+    latestEducation?: {
+        school: string;
+        degree: string;
+        duration: string;
+    };
+    certifications?: Array<{
+        name: string;
+        issuer: string;
+        issued_date: string;
+    }>;
+    skills?: string[];
+}
+
+interface SessionData {
+    jobDesc: string;
+    selectedExperience: string;
+    selectedRepos: string;
+    profileData: string;
+    basicInfo: string;
+    generatedCoverLetter?: string;
+}
 
 export default function CoverLetterPage() {
-    const [coverLetterData, setCoverLetterData] = useState<any>(null);
+    const [coverLetterData, setCoverLetterData] = useState<CoverLetterData | null>(null);
     const [isLoading, setIsLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
-    const [basicInfo, setBasicInfo] = useState<any>({});
-    const [profileDataParsed, setProfileDataParsed] = useState<any>({});
+    const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+        github: "",
+        linkedin: "",
+        phone: "",
+        email: "",
+        portfolio: ""
+    });
+    const [profileDataParsed, setProfileDataParsed] = useState<ProfileData>({
+        fullName: "",
+        location: ""
+    });
 
     useEffect(() => {
         const generateCoverLetter = async () => {
@@ -20,8 +81,14 @@ export default function CoverLetterPage() {
                 let relevantExperiences = "[]";
                 let relevantProjects = "[]";
                 let profileData = "{}";
-                let basicInfoData = {};
-                let preGeneratedCoverLetter = null;
+                let basicInfoData: BasicInfo = {
+                    github: "",
+                    linkedin: "",
+                    phone: "",
+                    email: "",
+                    portfolio: ""
+                };
+                let preGeneratedCoverLetter: string | null = null;
                 
                 if (typeof window !== 'undefined') {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -29,13 +96,13 @@ export default function CoverLetterPage() {
                     
                     if (sessionDataParam) {
                         try {
-                            const decodedData = JSON.parse(decodeURIComponent(sessionDataParam));
+                            const decodedData: SessionData = JSON.parse(decodeURIComponent(sessionDataParam));
                             
                             jobDesc = decodedData.jobDesc || "";
                             relevantExperiences = decodedData.selectedExperience || "[]";
                             relevantProjects = decodedData.selectedRepos || "[]";
                             profileData = decodedData.profileData || "{}";
-                            basicInfoData = JSON.parse(decodedData.basicInfo || "{}");
+                            basicInfoData = JSON.parse(decodedData.basicInfo || "{}") as BasicInfo;
                             preGeneratedCoverLetter = decodedData.generatedCoverLetter || null;
                             
                         } catch (e) {
@@ -46,7 +113,7 @@ export default function CoverLetterPage() {
                         relevantExperiences = sessionStorage.getItem("selectedExperience") || "[]";
                         relevantProjects = sessionStorage.getItem("selectedRepos") || "[]";
                         profileData = sessionStorage.getItem("profileData") || "{}";
-                        basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}");
+                        basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}") as BasicInfo;
                         preGeneratedCoverLetter = sessionStorage.getItem("generatedCoverLetter");
                         
                         console.log("Using data from sessionStorage");
@@ -55,15 +122,16 @@ export default function CoverLetterPage() {
                 
                 setBasicInfo(basicInfoData);
                 
-                let data;
+                let data: string;
                 if (preGeneratedCoverLetter) {
                     data = preGeneratedCoverLetter;
                 } else {
-                    data = await coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData);
+                    data = await JSON.stringify(coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData))
                 }
                 
-                const parsedData = JSON.parse(data || "{}");
-                setProfileDataParsed(JSON.parse(profileData || "{}"));
+                const parsedData: CoverLetterData = JSON.parse(data || "{}");
+                const parsedProfileData: ProfileData = JSON.parse(profileData || "{}");
+                setProfileDataParsed(parsedProfileData);
 
                 setCoverLetterData(parsedData);
             } catch (err) {

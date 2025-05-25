@@ -4,7 +4,7 @@ export async function POST(request: Request) {
     const { url } = await request.json();
     
     // Extract username from LinkedIn URL
-    let username = url;
+    const username = url;
 
     // Initialize the ApifyClient with API token
     const client = new ApifyClient({

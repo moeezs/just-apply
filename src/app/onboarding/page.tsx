@@ -243,8 +243,8 @@ export default function OnboardingPage() {
           <div className="flex gap-2 mt-4">
             <ScrollArea className="h-64 w-full">
               <div className="flex flex-col gap-2">
-                {JSON.parse(sessionStorage.getItem("relevantRepos") || "[]").map((repo: any, index: number) => (
-                  <div key={repo.id || index} className="border p-2 rounded">
+                {JSON.parse(sessionStorage.getItem("relevantRepos") || "[]").map((repo: { url: string; name: string; lang: string; desc: string; info: string; }, index: number) => (
+                  <div key={index} className="border p-2 rounded">
                     <label className="flex items-center gap-2">
                       <input
                         type="checkbox"
@@ -266,7 +266,7 @@ export default function OnboardingPage() {
             <ScrollArea className="h-64 w-full">
               <div className="flex flex-col gap-2">
 
-                {JSON.parse(sessionStorage.getItem("linkedinExperience") || "[]").map((exp: any, index: number) => (
+                {JSON.parse(sessionStorage.getItem("linkedinExperience") || "[]").map((exp: { title: string; company: string; company2: string; }, index: number) => (
                   <div key={index} className="border p-2 rounded">
                     <label className="flex items-center gap-2">
                       <input

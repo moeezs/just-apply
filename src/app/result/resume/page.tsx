@@ -4,11 +4,83 @@ import React, { useState, useEffect } from 'react'
 import { CiGlobe, CiLinkedin, CiMail, CiPhone } from "react-icons/ci";
 import { FaGithub } from "react-icons/fa";
 
+// Type definitions
+interface BasicInfo {
+    github: string;
+    linkedin: string;
+    phone: string;
+    email: string;
+    portfolio: string;
+}
+
+interface Education {
+    school: string;
+    degree: string;
+    duration: string;
+}
+
+interface Certification {
+    name: string;
+    issuer: string;
+    issuedDate: string;
+}
+
+interface ProfileData {
+    fullName: string;
+    location: string;
+    headline?: string;
+    skills: string[];
+    latestEducation: Education;
+    certifications: Certification[];
+}
+
+interface Repository {
+    name: string;
+    description: string;
+    lang: string;
+    url?: string;
+    stars?: number;
+    forks?: string;
+    updated?: string;
+}
+
+interface Experience {
+    title: string;
+    company: string;
+    company2?: string;
+    duration: string;
+    location?: string;
+    is_current?: boolean;
+}
+
+interface SessionData {
+    profileData: string;
+    basicInfo: string;
+    selectedRepos: string;
+    selectedExperience: string;
+}
+
 export default function Resume() {
-    const [profileData, setProfileData] = useState<any>({});
-    const [basicInfo, setBasicInfo] = useState<any>({});
-    const [selectedRepos, setSelectedRepos] = useState<any[]>([]);
-    const [selectedExperiences, setSelectedExperiences] = useState<any[]>([]);
+    const [profileData, setProfileData] = useState<ProfileData>({
+        fullName: '',
+        location: '',
+        skills: [],
+        latestEducation: {
+            school: '',
+            degree: '',
+            duration: ''
+        },
+        certifications: []
+    });
+    const [basicInfo, setBasicInfo] = useState<BasicInfo>({
+        github: '',
+        linkedin: '',
+        phone: '',
+        email: '',
+        portfolio: ''
+    });
+    const [selectedRepos, setSelectedRepos] = useState<Repository[]>([]);
+    const [selectedExperiences, setSelectedExperiences] = useState<Experience[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
 
     useEffect(() => {
@@ -18,26 +90,26 @@ export default function Resume() {
             
             if (sessionDataParam) {
                 try {
-                    const decodedData = JSON.parse(decodeURIComponent(sessionDataParam));
+                    const decodedData: SessionData = JSON.parse(decodeURIComponent(sessionDataParam));
                     
-                    setProfileData(JSON.parse(decodedData.profileData || '{}'));
-                    setBasicInfo(JSON.parse(decodedData.basicInfo || '{}'));
-                    setSelectedRepos(JSON.parse(decodedData.selectedRepos || '[]'));
-                    setSelectedExperiences(JSON.parse(decodedData.selectedExperience || '[]'));
+                    setProfileData(JSON.parse(decodedData.profileData || '{}') as ProfileData);
+                    setBasicInfo(JSON.parse(decodedData.basicInfo || '{}') as BasicInfo);
+                    setSelectedRepos(JSON.parse(decodedData.selectedRepos || '[]') as Repository[]);
+                    setSelectedExperiences(JSON.parse(decodedData.selectedExperience || '[]') as Experience[]);
                     
                     // console.log("Resume: Using data from URL parameters");
                 } catch (e) {
                     console.error("Error parsing session data from URL:", e);
-                    setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}'));
-                    setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}'));
-                    setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]'));
-                    setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]'));
+                    setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}') as ProfileData);
+                    setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}') as BasicInfo);
+                    setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]') as Repository[]);
+                    setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]') as Experience[]);
                 }
             } else {
-                setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}'));
-                setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}'));
-                setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]'));
-                setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]'));
+                setProfileData(JSON.parse(sessionStorage.getItem('profileData') || '{}') as ProfileData);
+                setBasicInfo(JSON.parse(sessionStorage.getItem('basicInfo') || '{}') as BasicInfo);
+                setSelectedRepos(JSON.parse(sessionStorage.getItem('selectedRepos') || '[]') as Repository[]);
+                setSelectedExperiences(JSON.parse(sessionStorage.getItem('selectedExperience') || '[]') as Experience[]);
                 
                 console.log("Resume: Using data from sessionStorage");
             }
@@ -141,7 +213,7 @@ export default function Resume() {
         {/* <!-- Work Experience Section --> */}
         <section className="mb-8">
             <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Work Experience</h2>
-            {selectedExperiences.map((experience: any, index: number) => (
+            {selectedExperiences.map((experience: Experience, index: number) => (
                 <div key={index} className="mb-6">
                     <p className="text-lg font-bold">{experience.title} | {experience.company} {experience.company2}</p>
                     <p className="text-sm text-gray-600">{experience.duration}</p>
@@ -178,7 +250,7 @@ export default function Resume() {
         <section className="mb-8">
             <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Projects</h2>
             <ul className="list-disc pl-5 space-y-2 text-sm text-gray-700">
-                {selectedRepos.map((repo: any, index: number) => (
+                {selectedRepos.map((repo: Repository, index: number) => (
                     <li key={index}>
                         <strong>{repo.name}</strong> : {repo.description} <br />
                         <em>{repo.lang}</em>
@@ -194,7 +266,7 @@ export default function Resume() {
         <section>
             <h2 className="text-2xl font-semibold border-b pb-2 mb-4">Certifications</h2>
             <ul className="list-disc pl-5 space-y-1 text-sm text-gray-700">
-                {profileData?.certifications.map((certification: any, index: number) => (
+                {profileData?.certifications.map((certification: Certification, index: number) => (
                     <li key={index}>
                         <strong>{certification.name}</strong> from {certification.issuer} - {certification.issuedDate}
                     </li>
