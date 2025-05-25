@@ -63,11 +63,11 @@ export async function relevantReposParser(repos: ReturnType<typeof githubRepoPar
     void jobDesc;
 
 
-    const sampleRes = repos.map((repo: any) => ({
+    const currentRes = repos.map((repo: any) => ({
         ...repo,
         relevant: "false" // for now
     }));
-    return sampleRes;
+    return JSON.stringify(currentRes);
 }
 
 export function rawToExperience(rawJson: string) {
