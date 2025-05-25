@@ -39,7 +39,7 @@ export async function coverLetterOutput(jobDesc: string, relevantExperiencesIn: 
 
                                 **3. STRUCTURE REQUIREMENTS:**
                                 - Opening paragraph: Hook the reader with your strongest qualification and show company knowledge
-                                - Body paragraphs (3-4): Strategically showcase relevant experience, projects, and skills with specific examples
+                                - Body paragraphs (2-3): Strategically showcase relevant experience, projects, and skills with specific examples
                                 - Closing paragraph: Reinforce value proposition and include strong call to action
                                 - Each paragraph must be a separate element in an array
                                 - You ARE NOT TO implement ANY placeholders at all. The output must be a complete cover letter with no placeholders.

@@ -124,10 +124,12 @@ export default function OnboardingPage() {
       
       if (selectedRepos.length === 0) {
         alert("Please select at least one repository.");
+        setIsLoading(false);
         return;
       }
       if (selectedExperience.length === 0) {
         alert("Please select at least one work experience.");
+        setIsLoading(false);
         return;
       }
 
@@ -136,8 +138,27 @@ export default function OnboardingPage() {
       
       sessionStorage.setItem("selectedRepos", JSON.stringify(filteredRepos));
       sessionStorage.setItem("selectedExperience", JSON.stringify(filteredExperience));
-      setIsLoading(false);
-      nextStep();
+      
+      try {
+        const jobDesc = sessionStorage.getItem("jobDesc") || "";
+        const profileData = sessionStorage.getItem("profileData") || "{}";
+        
+        const { coverLetterOutput } = await import("../result/letter/geminiOutput");
+        const coverLetterContent = await coverLetterOutput(
+          jobDesc,
+          JSON.stringify(filteredExperience),
+          JSON.stringify(filteredRepos),
+          profileData
+        );
+        sessionStorage.setItem("generatedCoverLetter", coverLetterContent || "");
+
+        nextStep();
+      } catch (error) {
+        console.error("Error generating cover letter:", error);
+        nextStep();
+      } finally {
+        setIsLoading(false);
+      }
     }
     if (step === 3) {
       const phoneInput = document.getElementById("phone") as HTMLInputElement | null;
@@ -313,11 +334,11 @@ export default function OnboardingPage() {
         </Button>
         {step < steps.length - 1 ? (
           <LoaderButton onClick={nextStepCheck} isLoading={isLoading}>
-            Next
+            {isLoading && step === 2 ? "Generating Cover Letter..." : isLoading ? "Loading..." : "Next"}
           </LoaderButton>
         ) : (
           <LoaderButton onClick={nextStepCheck} isLoading={isLoading}>
-            Submit
+            {isLoading ? "Loading..." : "Submit"}
           </LoaderButton>
         )}
       </div>

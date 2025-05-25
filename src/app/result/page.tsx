@@ -46,10 +46,11 @@ export default function ResultPage() {
         selectedExperience: sessionStorage.getItem("selectedExperience") || "[]",
         selectedRepos: sessionStorage.getItem("selectedRepos") || "[]",
         profileData: sessionStorage.getItem("profileData") || "{}",
-        basicInfo: sessionStorage.getItem("basicInfo") || "{}"
+        basicInfo: sessionStorage.getItem("basicInfo") || "{}",
+        generatedCoverLetter: sessionStorage.getItem("generatedCoverLetter") || ""
       };
       
-      const encodedData = btoa(JSON.stringify(sessionData));
+      const encodedData = encodeURIComponent(JSON.stringify(sessionData));
       
       const response = await fetch('/api/getPdf', {
         method: 'POST',

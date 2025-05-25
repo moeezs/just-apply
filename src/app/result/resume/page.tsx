@@ -18,7 +18,7 @@ export default function Resume() {
             
             if (sessionDataParam) {
                 try {
-                    const decodedData = JSON.parse(atob(sessionDataParam));
+                    const decodedData = JSON.parse(decodeURIComponent(sessionDataParam));
                     
                     setProfileData(JSON.parse(decodedData.profileData || '{}'));
                     setBasicInfo(JSON.parse(decodedData.basicInfo || '{}'));

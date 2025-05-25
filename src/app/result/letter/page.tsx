@@ -21,6 +21,7 @@ export default function CoverLetterPage() {
                 let relevantProjects = "[]";
                 let profileData = "{}";
                 let basicInfoData = {};
+                let preGeneratedCoverLetter = null;
                 
                 if (typeof window !== 'undefined') {
                     const urlParams = new URLSearchParams(window.location.search);
@@ -28,15 +29,15 @@ export default function CoverLetterPage() {
                     
                     if (sessionDataParam) {
                         try {
-                            const decodedData = JSON.parse(atob(sessionDataParam));
+                            const decodedData = JSON.parse(decodeURIComponent(sessionDataParam));
                             
                             jobDesc = decodedData.jobDesc || "";
                             relevantExperiences = decodedData.selectedExperience || "[]";
                             relevantProjects = decodedData.selectedRepos || "[]";
                             profileData = decodedData.profileData || "{}";
                             basicInfoData = JSON.parse(decodedData.basicInfo || "{}");
+                            preGeneratedCoverLetter = decodedData.generatedCoverLetter || null;
                             
-                            console.log("Using data from URL parameters");
                         } catch (e) {
                             console.error("Error parsing session data from URL:", e);
                         }
@@ -46,6 +47,7 @@ export default function CoverLetterPage() {
                         relevantProjects = sessionStorage.getItem("selectedRepos") || "[]";
                         profileData = sessionStorage.getItem("profileData") || "{}";
                         basicInfoData = JSON.parse(sessionStorage.getItem("basicInfo") || "{}");
+                        preGeneratedCoverLetter = sessionStorage.getItem("generatedCoverLetter");
                         
                         console.log("Using data from sessionStorage");
                     }
@@ -53,7 +55,13 @@ export default function CoverLetterPage() {
                 
                 setBasicInfo(basicInfoData);
                 
-                const data = await coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData);
+                let data;
+                if (preGeneratedCoverLetter) {
+                    data = preGeneratedCoverLetter;
+                } else {
+                    data = await coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData);
+                }
+                
                 const parsedData = JSON.parse(data || "{}");
                 setProfileDataParsed(JSON.parse(profileData || "{}"));
 
