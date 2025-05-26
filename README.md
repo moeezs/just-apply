@@ -28,7 +28,7 @@ Just Apply is an intelligent job application tool that automates the creation of
 - **React 19** - Latest React with concurrent features
 - **TypeScript** - Type-safe development
 - **Tailwind CSS** - Utility-first styling
-- **Radix UI** - Accessible component primitives
+- **Shadcn UI** - Accessible component primitives
 - **Lucide React** - Beautiful icons
 
 ### AI & Data Processing
@@ -43,8 +43,6 @@ Just Apply is an intelligent job application tool that automates the creation of
 - **html2canvas** - HTML to canvas conversion
 
 ### Additional Tools
-- **React Hook Form** - Form state management
-- **Zod** - Schema validation
 - **JSZip** - Archive generation
 - **Nodemailer** - Email sending
 
@@ -80,10 +78,9 @@ Just Apply is an intelligent job application tool that automates the creation of
    Add your environment variables:
    ```env
    GEMINI_API_KEY=your_gemini_api_key_here
-   SMTP_HOST=your_smtp_host
-   SMTP_PORT=587
-   SMTP_USER=your_email@domain.com
-   SMTP_PASS=your_app_password
+   APIFY_TOKEN=your_apify_token_here
+   GMAIL_FROM=your_email@domain.com
+   GMAIL_APP_PASSWORD=your_app_password
    ```
 
 4. **Run the development server**
@@ -160,7 +157,9 @@ The app is optimized for Vercel with:
 ### Environment Variables
 Required for full functionality:
 - `GEMINI_API_KEY`: Google Gemini AI API key
-- `SMTP_*`: Email configuration (optional)
+- `APIFY_TOKEN`: Apify API token
+- `GMAIL_FROM`: Email address to send from
+- `GMAIL_APP_PASSWORD`: Gmail app password
 
 ## 🎨 UI Components
 
@@ -217,13 +216,13 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 - [Vercel](https://vercel.com) for hosting and deployment
 - [Google Gemini](https://ai.google.dev/) for AI-powered content generation
 - [Tailwind CSS](https://tailwindcss.com) for styling
-- [Radix UI](https://www.radix-ui.com/) for accessible components
+- [Shadcn UI](https://www.shadcn.com/) for accessible components
 
 ## 📞 Support
 
 If you have any questions or need help:
 
-1. Check the [Issues](https://github.com/yourusername/just-apply/issues) page
+1. Check the [Issues](https://github.com/moeezs/just-apply/issues) page
 2. Create a new issue with detailed information
 3. Join our community discussions
 
