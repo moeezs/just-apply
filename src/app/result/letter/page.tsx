@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { coverLetterOutput } from "./geminiOutput";
 
 export default function CoverLetterPage() {
     const [coverLetterData, setCoverLetterData] = useState<any>(null);
@@ -63,7 +62,24 @@ export default function CoverLetterPage() {
                 if (preGeneratedCoverLetter) {
                     data = preGeneratedCoverLetter;
                 } else {
-                    data = await coverLetterOutput(jobDesc, relevantExperiences, relevantProjects, profileData);
+                    const response = await fetch('/api/generateCoverLetter', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({
+                            jobDesc,
+                            relevantExperiencesIn: relevantExperiences,
+                            relevantProjectsIn: relevantProjects,
+                            profileDataIn: profileData
+                        }),
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to generate cover letter');
+                    }
+
+                    data = await response.text();
                 }
                 
                 const parsedData = JSON.parse(data || "{}");

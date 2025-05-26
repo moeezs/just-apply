@@ -3,6 +3,9 @@
     "src/app/api/getPdf/route.ts": {
       "maxDuration": 30,
       "memory": 1024
+    },
+    "src/app/api/generateCoverLetter/route.ts": {
+      "maxDuration": 30
     }
   },
   "build": {

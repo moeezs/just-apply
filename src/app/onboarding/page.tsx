@@ -143,13 +143,24 @@ export default function OnboardingPage() {
         const jobDesc = sessionStorage.getItem("jobDesc") || "";
         const profileData = sessionStorage.getItem("profileData") || "{}";
         
-        const { coverLetterOutput } = await import("../result/letter/geminiOutput");
-        const coverLetterContent = await coverLetterOutput(
-          jobDesc,
-          JSON.stringify(filteredExperience),
-          JSON.stringify(filteredRepos),
-          profileData
-        );
+        const response = await fetch('/api/generateCoverLetter', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            jobDesc,
+            relevantExperiencesIn: JSON.stringify(filteredExperience),
+            relevantProjectsIn: JSON.stringify(filteredRepos),
+            profileDataIn: profileData
+          }),
+        });
+
+        if (!response.ok) {
+          throw new Error('Failed to generate cover letter');
+        }
+
+        const coverLetterContent = await response.text();
         sessionStorage.setItem("generatedCoverLetter", coverLetterContent || "");
 
         nextStep();
