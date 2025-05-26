@@ -2,7 +2,7 @@ import { NextRequest } from 'next/server';
 
 export async function POST(req: NextRequest) {
   try {
-    const { htmlContent, filename } = await req.json();
+    const { htmlContent } = await req.json();
 
     if (!htmlContent) {
       return new Response(JSON.stringify({ error: 'Missing HTML content' }), {

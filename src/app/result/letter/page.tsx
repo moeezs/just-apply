@@ -116,9 +116,9 @@ export default function CoverLetterPage() {
                     </p>
                     <ol className="list-decimal list-inside text-blue-700 text-sm space-y-1">
                         <li>Press <kbd className="px-1 py-0.5 bg-blue-100 rounded">Ctrl+P</kbd> (or <kbd className="px-1 py-0.5 bg-blue-100 rounded">Cmd+P</kbd> on Mac)</li>
-                        <li>In the print dialog, select "Save as PDF" as the destination</li>
-                        <li>Name the file "cover-letter.pdf"</li>
-                        <li>Click "Save"</li>
+                        <li>In the print dialog, select &quot;Save as PDF&quot; as the destination</li>
+                        <li>Name the file &quot;cover-letter.pdf&quot;</li>
+                        <li>Click &quot;Save&quot;</li>
                     </ol>
                 </div>
             )}
