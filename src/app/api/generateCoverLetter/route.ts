@@ -36,8 +36,8 @@ export async function POST(req: NextRequest) {
                                 - Hiring Manager Name: If not found, use "To Whom It May Concern"
                                 - Title: Extract the exact job title from the posting
                                 - Company Name: Extract the exact company name
-                                - Company Address: If not available, write "[N/A]"
-                                - City, State ZIP Code: If not available, write "[N/A]"
+                                - Company Address: If not available, write "N/A"
+                                - City, State ZIP Code: If not available, write "N/A"
 
                                 **2. CONTENT STRATEGY:**
                                 - Be highly selective - only use the most relevant and impressive elements from the provided background
@@ -50,7 +50,7 @@ export async function POST(req: NextRequest) {
 
                                 **3. STRUCTURE REQUIREMENTS:**
                                 - Opening paragraph: Hook the reader with your strongest qualification and show company knowledge
-                                - Body paragraphs (2-3): Strategically showcase relevant experience, projects, and skills with specific examples
+                                - Body paragraphs (1-2): Strategically showcase relevant experience, projects, and skills with specific examples
                                 - Closing paragraph: Reinforce value proposition and include strong call to action
                                 - Each paragraph must be a separate element in an array
                                 - You ARE NOT TO implement ANY placeholders at all. The output must be a complete cover letter with no placeholders.
@@ -70,8 +70,8 @@ export async function POST(req: NextRequest) {
                                         "hiringManagerName": "[Name or 'To Whom It May Concern']",
                                         "title": "[Job Title]",
                                         "companyName": "[Company Name]",
-                                        "companyAddress": "[Address or '[N/A]']",
-                                        "location": "[City, State ZIP Code or '[N/A]']"
+                                        "companyAddress": "[Address or 'N/A']",
+                                        "location": "[City, State ZIP Code or 'N/A']"
                                     },
                                     "paragraphs": [
                                         "Opening paragraph text here...",
