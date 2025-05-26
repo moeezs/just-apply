@@ -16,6 +16,7 @@
     "@radix-ui/react-progress": "^1.1.7",
     "@radix-ui/react-scroll-area": "^1.2.9",
     "@radix-ui/react-slot": "^1.2.3",
+    "@sparticuz/chromium": "^133.0.0",
     "apify-client": "^2.12.4",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -26,7 +27,7 @@
     "lucide-react": "^0.511.0",
     "next": "^15.3.2",
     "nodemailer": "^7.0.3",
-    "puppeteer": "^24.9.0",
+    "puppeteer-core": "^24.9.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-hook-form": "^7.56.4",
@@ -46,6 +47,7 @@
     "eslint": "^9",
     "eslint-config-next": "^15.3.2",
     "postcss": "^8",
+    "puppeteer": "^24.9.0",
     "tailwindcss": "^3.4.1",
     "typescript": "^5"
   }

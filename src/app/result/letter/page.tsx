@@ -9,8 +9,13 @@ export default function CoverLetterPage() {
     const [error, setError] = useState<string | null>(null);
     const [basicInfo, setBasicInfo] = useState<any>({});
     const [profileDataParsed, setProfileDataParsed] = useState<any>({});
+    const [isManualPdfMode, setIsManualPdfMode] = useState(false);
 
     useEffect(() => {
+        // Check if this is manual PDF mode
+        const urlParams = new URLSearchParams(window.location.search);
+        setIsManualPdfMode(urlParams.get('manual-pdf') === 'true');
+
         const generateCoverLetter = async () => {
             try {
                 setIsLoading(true);
@@ -103,6 +108,20 @@ export default function CoverLetterPage() {
 
     return (
         <div className="max-w-4xl mx-auto p-8 bg-white min-h-screen">
+            {isManualPdfMode && (
+                <div className="mb-6 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <h2 className="text-lg font-semibold text-blue-800 mb-2">📄 Manual PDF Generation</h2>
+                    <p className="text-blue-700 mb-2">
+                        To save this cover letter as a PDF:
+                    </p>
+                    <ol className="list-decimal list-inside text-blue-700 text-sm space-y-1">
+                        <li>Press <kbd className="px-1 py-0.5 bg-blue-100 rounded">Ctrl+P</kbd> (or <kbd className="px-1 py-0.5 bg-blue-100 rounded">Cmd+P</kbd> on Mac)</li>
+                        <li>In the print dialog, select "Save as PDF" as the destination</li>
+                        <li>Name the file "cover-letter.pdf"</li>
+                        <li>Click "Save"</li>
+                    </ol>
+                </div>
+            )}
             <div className="space-y-6">
                 <div className="text-right space-y-1">
                     <h1 className="text-2xl font-bold text-gray-900">{profileDataParsed?.fullName || "[Your Full Name]"}</h1>

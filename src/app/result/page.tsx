@@ -107,6 +107,35 @@ export default function ResultPage() {
     } catch (err) {
       console.error('PDF generation error:', err);
       setIsGeneratingPDFs(false);
+      
+      // Show fallback options to the user
+      const userConfirm = confirm(
+        'PDF generation failed. Would you like to:\n\n' +
+        '• Click OK to open the pages in new tabs for manual PDF generation (Ctrl+P)\n' +
+        '• Click Cancel to try again later'
+      );
+      
+      if (userConfirm) {
+        // Open the pages in new tabs for manual PDF generation
+        const sessionData = {
+          jobDesc: sessionStorage.getItem("jobDesc") || "",
+          selectedExperience: sessionStorage.getItem("selectedExperience") || "[]",
+          selectedRepos: sessionStorage.getItem("selectedRepos") || "[]",
+          profileData: sessionStorage.getItem("profileData") || "{}",
+          basicInfo: sessionStorage.getItem("basicInfo") || "{}",
+          generatedCoverLetter: sessionStorage.getItem("generatedCoverLetter") || ""
+        };
+        
+        const encodedData = encodeURIComponent(JSON.stringify(sessionData));
+        
+        // Open letter page
+        window.open(`/result/letter?session-data=${encodedData}&manual-pdf=true`, '_blank');
+        
+        // Open resume page
+        setTimeout(() => {
+          window.open(`/result/resume?session-data=${encodedData}&manual-pdf=true`, '_blank');
+        }, 1000);
+      }
     }
   };
 

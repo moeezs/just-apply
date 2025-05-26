@@ -1,0 +1,15 @@
+{
+  "functions": {
+    "src/app/api/getPdf/route.ts": {
+      "maxDuration": 30,
+      "memory": 1024
+    }
+  },
+  "build": {
+    "env": {
+      "PUPPETEER_SKIP_CHROMIUM_DOWNLOAD": "true"
+    }
+  },
+  "installCommand": "npm install",
+  "buildCommand": "npm run build"
+}

@@ -10,11 +10,15 @@ export default function Resume() {
     const [selectedRepos, setSelectedRepos] = useState<any[]>([]);
     const [selectedExperiences, setSelectedExperiences] = useState<any[]>([]);
     const [isLoaded, setIsLoaded] = useState(false);
+    const [isManualPdfMode, setIsManualPdfMode] = useState(false);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const urlParams = new URLSearchParams(window.location.search);
             const sessionDataParam = urlParams.get('session-data');
+            
+            // Check if this is manual PDF mode
+            setIsManualPdfMode(urlParams.get('manual-pdf') === 'true');
             
             if (sessionDataParam) {
                 try {
@@ -71,6 +75,20 @@ export default function Resume() {
     return (
 
     <div className="max-w-4xl mx-auto p-8 bg-white mt-5">
+        {isManualPdfMode && (
+            <div className="mb-6 p-4 bg-green-50 border border-green-200 rounded-lg">
+                <h2 className="text-lg font-semibold text-green-800 mb-2">📄 Manual PDF Generation</h2>
+                <p className="text-green-700 mb-2">
+                    To save this resume as a PDF:
+                </p>
+                <ol className="list-decimal list-inside text-green-700 text-sm space-y-1">
+                    <li>Press <kbd className="px-1 py-0.5 bg-green-100 rounded">Ctrl+P</kbd> (or <kbd className="px-1 py-0.5 bg-green-100 rounded">Cmd+P</kbd> on Mac)</li>
+                    <li>In the print dialog, select "Save as PDF" as the destination</li>
+                    <li>Name the file "resume.pdf"</li>
+                    <li>Click "Save"</li>
+                </ol>
+            </div>
+        )}
         {/* <!-- Header --> */}
         <div>
             <div className="flex justify-between items-center border-b pb-4 mb-3">
