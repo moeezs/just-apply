@@ -47,6 +47,8 @@ export async function POST(req: NextRequest) {
                                 - Show genuine enthusiasm and cultural fit
                                 - Use action verbs and specific examples
                                 - Avoid generic statements and clichés
+                                - DO NOT use the phrase "I am writing to apply for" or any similar phrases
+                                - DO NOT BE EXTREMELY LONG. The cover letter should be concise and to the point, ideally no more than 1-2 body paragraphs. YOU ARE NOT TO EXCEED 2 BODY PARAGRAPHS TOTAL.
 
                                 **3. STRUCTURE REQUIREMENTS:**
                                 - Opening paragraph: Hook the reader with your strongest qualification and show company knowledge

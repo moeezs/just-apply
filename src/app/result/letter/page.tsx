@@ -148,12 +148,12 @@ export default function CoverLetterPage() {
 
                 {/* Date */}
                 <div className="text-right">
-                    {new Date().toLocaleDateString('en-CA', { 
+                    {new Date().toLocaleDateString('en-US', { 
                         timeZone: 'America/Toronto',
                         day: 'numeric', 
                         month: 'long', 
                         year: 'numeric' 
-                    }).replace(/ ([0-9]{4})$/, ', $1')}
+                    })}
                 </div>
                 {/* Hiring manager info */}
                 <div className="space-y-1">
